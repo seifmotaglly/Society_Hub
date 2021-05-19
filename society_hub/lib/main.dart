@@ -12,6 +12,6 @@ void main() => runApp(MaterialApp(
 class SociatyHub extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return LoadingScreen();
+    return WelcomeScreen();
   }
 }
