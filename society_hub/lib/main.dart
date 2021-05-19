@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sociaty_hub/constants/ConstantColors.dart';
-import 'package:sociaty_hub/screens/LoadingScreen.dart';
-import 'package:sociaty_hub/screens/SignInScreen.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
 
 void main() => runApp(MaterialApp(
