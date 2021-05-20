@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "819402418800",
+    "project_id": "the-social-f8291",
+    "storage_bucket": "the-social-f8291.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:819402418800:android:b8c791ddbe3c7e113462b5",
+        "android_client_info": {
+          "package_name": "com.example.sociaty_hub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "819402418800-s75kc10vhu1ra0umdgn250rfa6bf5elr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD99G1ZnYxltGwLTV8VRVuFA2GkYDalAvA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "819402418800-s75kc10vhu1ra0umdgn250rfa6bf5elr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
