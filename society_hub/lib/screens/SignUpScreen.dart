@@ -25,105 +25,107 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: darkGrey,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 50),
-        child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                // SizedBox(height: 90),
-                Text(
-                  "Sign up to meet new friends",
-                  style: TextStyle(color: white, fontSize: 18),
-                ),
-                SizedBox(height: 50),
-                Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          validator: (userName) =>
-                              isLowercase(userName) & userName.isNotEmpty
-                                  ? null
-                                  : "username must be lowercase",
-                          decoration:
-                              decoratedInput.copyWith(hintText: "User name"),
-                          onChanged: (userName) {
-                            setState(() => this.userName = userName);
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          validator: (email) =>
-                              isEmail(email) ? null : "enter a valid email",
-                          decoration:
-                              decoratedInput.copyWith(hintText: "Email"),
-                          onChanged: (email) {
-                            setState(() => this.email = email);
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          validator: (password) => password.length < 8
-                              ? "enter password more 8 characters"
-                              : null,
-                          decoration:
-                              decoratedInput.copyWith(hintText: "Password"),
-                          obscureText: true,
-                          onChanged: (password) {
-                            setState(() => this.password = password);
-                          },
-                        ),
-                      ],
-                    )),
-                SizedBox(height: 40),
-                MaterialButton(
-                  minWidth: double.infinity,
-                  height: 60,
-                  color: white,
-                  shape: RoundedRectangleBorder(
-                      side: BorderSide(color: white),
-                      borderRadius: BorderRadius.circular(50)),
-                  onPressed: () async {
-                    if (_formKey.currentState.validate()) {
-                      dynamic result =
-                          await _auth.signUp(userName, email, password);
-                      if (result == null) {
-                        setState(() => err = "something went wrong");
-                        print(err);
-                      } else
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => HomeScreen()));
-                    }
-                  },
-                  child: Text("Sign up",
-                      style: TextStyle(
-                          color: darkGrey,
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold)),
-                ),
-                SizedBox(height: 20),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Text("Do you have an account ? ",
-                          style: TextStyle(color: white)),
-                      TextButton(
-                          onPressed: () => Navigator.push(
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 50),
+          child: Center(
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  // SizedBox(height: 90),
+                  Text(
+                    "Sign up to meet new friends",
+                    style: TextStyle(color: white, fontSize: 18),
+                  ),
+                  SizedBox(height: 50),
+                  Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            validator: (userName) =>
+                                isLowercase(userName) & userName.isNotEmpty
+                                    ? null
+                                    : "username must be lowercase",
+                            decoration:
+                                decoratedInput.copyWith(hintText: "User name"),
+                            onChanged: (userName) {
+                              setState(() => this.userName = userName);
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            validator: (email) =>
+                                isEmail(email) ? null : "enter a valid email",
+                            decoration:
+                                decoratedInput.copyWith(hintText: "Email"),
+                            onChanged: (email) {
+                              setState(() => this.email = email);
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          TextFormField(
+                            validator: (password) => password.length < 8
+                                ? "enter password more 8 characters"
+                                : null,
+                            decoration:
+                                decoratedInput.copyWith(hintText: "Password"),
+                            obscureText: true,
+                            onChanged: (password) {
+                              setState(() => this.password = password);
+                            },
+                          ),
+                        ],
+                      )),
+                  SizedBox(height: 40),
+                  MaterialButton(
+                    minWidth: double.infinity,
+                    height: 60,
+                    color: white,
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(color: white),
+                        borderRadius: BorderRadius.circular(50)),
+                    onPressed: () async {
+                      if (_formKey.currentState.validate()) {
+                        dynamic result =
+                            await _auth.signUp(userName, email, password);
+                        if (result == null) {
+                          setState(() => err = "something went wrong");
+                          print(err);
+                        } else
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => SignInScreen())),
-                          child: Text("Sign in",
-                              style: TextStyle(color: white, fontSize: 20)))
-                    ]),
-                SizedBox(height: 20),
-                Image.asset("assets/images/signup.png")
-              ],
+                                  builder: (context) => HomeScreen()));
+                      }
+                    },
+                    child: Text("Sign up",
+                        style: TextStyle(
+                            color: darkGrey,
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Do you have an account ? ",
+                            style: TextStyle(color: white)),
+                        TextButton(
+                            onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SignInScreen())),
+                            child: Text("Sign in",
+                                style: TextStyle(color: white, fontSize: 20)))
+                      ]),
+                  SizedBox(height: 20),
+                  Image.asset("assets/images/signup.png")
+                ],
+              ),
             ),
           ),
         ),

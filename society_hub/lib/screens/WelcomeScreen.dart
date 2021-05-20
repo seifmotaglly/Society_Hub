@@ -64,7 +64,7 @@ class WelcomeScreen extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         side: BorderSide(color: white),
                         borderRadius: BorderRadius.circular(50)),
-                    onPressed: () => Navigator.push(
+                    onPressed: () => Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => SignUpScreen())),
