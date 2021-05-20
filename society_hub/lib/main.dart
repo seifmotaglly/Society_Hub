@@ -1,17 +1,25 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:sociaty_hub/constants/ConstantColors.dart';
-import 'package:sociaty_hub/screens/LoadingScreen.dart';
-import 'package:sociaty_hub/screens/SignInScreen.dart';
-import 'package:sociaty_hub/screens/WelcomeScreen.dart';
+import 'package:provider/provider.dart';
+import 'package:sociaty_hub/models/SHUser.dart';
+import 'package:sociaty_hub/screens/Wrapper.dart';
+import 'package:sociaty_hub/services/Auth.dart';
 
-void main() => runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SociatyHub(),
-    ));
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SociatyHub(),
+  ));
+}
 
 class SociatyHub extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return WelcomeScreen();
+    return StreamProvider<SHUser>.value(
+        initialData: null,
+        value: AuthService().user,
+        child: MaterialApp(home: Wrapper()));
   }
 }
