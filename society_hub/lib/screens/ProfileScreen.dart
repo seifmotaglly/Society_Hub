@@ -21,7 +21,6 @@ class ProfileScreen extends StatelessWidget {
         ),
         backgroundColor: darkGrey,
       ),
-      bottomNavigationBar: BottomBar(1),
     );
   }
 }

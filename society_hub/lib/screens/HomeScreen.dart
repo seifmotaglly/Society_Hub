@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
 import 'package:sociaty_hub/services/Auth.dart';
-import 'package:sociaty_hub/widgets/bottombar/bottombar.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -10,6 +9,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     print("in HomeScreen");
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: white,
         appBar: AppBar(
@@ -33,7 +33,6 @@ class HomeScreen extends StatelessWidget {
                 })
           ],
         ),
-        bottomNavigationBar: BottomBar(0),
       ),
     );
   }

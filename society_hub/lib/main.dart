@@ -20,6 +20,6 @@ class SociatyHub extends StatelessWidget {
     return StreamProvider<SHUser>.value(
         initialData: null,
         value: AuthService().user,
-        child: MaterialApp(home: Wrapper()));
+        child: MaterialApp(debugShowCheckedModeBanner: false, home: Wrapper()));
   }
 }
