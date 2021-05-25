@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/models/ChatUser.dart';
+import 'package:sociaty_hub/services/Database.dart';
 import 'package:sociaty_hub/widgets/conversationList.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -9,6 +11,9 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  TextEditingController searchController = TextEditingController();
+  Database databaseReference = Database();
+  dynamic searchText = "";
   List<ChatUser> chatUsers = [
     ChatUser(
         name: "Jane Russel",
@@ -71,6 +76,38 @@ class _ChatScreenState extends State<ChatScreen> {
         image: "asset/images/logo.png",
         time: "Now"),
   ];
+
+  QuerySnapshot searchSnapshot;
+
+  Widget searchList() {
+    print("search querey is ${searchSnapshot.toString()}");
+    return searchSnapshot != null
+        ? ListView.builder(
+            itemCount: searchSnapshot.docs.length,
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              print("$index");
+              print(searchSnapshot.docs.toString());
+              print(searchSnapshot.docs[index]["email"]);
+              return SearchTile(
+                  username: searchSnapshot.docs[index]["email"], email: "");
+            })
+        : null;
+  }
+
+  initiateSearch() {
+    print("first print");
+    setState(() {
+      Update();
+    });
+  }
+
+  createChatRoom() {}
+
+  Future<void> Update() async {
+    searchSnapshot = await databaseReference.getUserByUsername(searchText);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,13 +164,23 @@ class _ChatScreenState extends State<ChatScreen> {
             Padding(
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TextField(
+                onChanged: (searchText) {
+                  setState(() => this.searchText = searchText);
+                },
+                controller: searchController,
                 decoration: InputDecoration(
                   hintText: "Search...",
                   hintStyle: TextStyle(color: Colors.grey[600]),
-                  prefixIcon: Icon(
-                    Icons.search,
-                    color: Colors.grey[600],
-                    size: 20,
+                  prefixIcon: GestureDetector(
+                    child: Icon(
+                      Icons.search,
+                      color: Colors.grey[600],
+                      size: 20,
+                    ),
+                    onTap: () {
+                      initiateSearch();
+                      ;
+                    },
                   ),
                   filled: true,
                   focusedBorder: OutlineInputBorder(
@@ -147,6 +194,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
             ),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                child: searchList()),
             ListView.builder(
               itemCount: chatUsers.length,
               shrinkWrap: true,
@@ -164,6 +214,40 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SearchTile extends StatelessWidget {
+  final String username;
+  final String email;
+
+  SearchTile({this.username, this.email});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(username),
+              Text(email),
+            ],
+          ),
+          Spacer(),
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+                decoration: BoxDecoration(
+                    color: blue, borderRadius: BorderRadius.circular(30)),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text("Message")),
+          )
+        ],
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
-import 'package:sociaty_hub/services/Auth.dart';
+import 'package:sociaty_hub/services/AuthService.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthService _auth = AuthService();

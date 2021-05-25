@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
-import 'package:sociaty_hub/models/chatMessage.dart';
+import 'package:sociaty_hub/models/ChatMessage.dart';
 
 class ChatDetailPage extends StatefulWidget {
   @override

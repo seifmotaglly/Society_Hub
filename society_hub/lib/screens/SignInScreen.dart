@@ -3,7 +3,7 @@ import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/constants/ConstantDecoration.dart';
 import 'package:sociaty_hub/screens/HomeScreen.dart';
 import 'package:sociaty_hub/screens/SignUpScreen.dart';
-import 'package:sociaty_hub/services/Auth.dart';
+import 'package:sociaty_hub/services/AuthService.dart';
 import 'package:string_validator/string_validator.dart';
 
 class SignInScreen extends StatefulWidget {
