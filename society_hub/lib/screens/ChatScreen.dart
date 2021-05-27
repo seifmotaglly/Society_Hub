@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/constants/ConstantFunctions.dart';
-import 'package:sociaty_hub/models/ChatUser.dart';
 import 'package:sociaty_hub/screens/ChatDetailScreen.dart';
 import 'package:sociaty_hub/services/Database.dart';
 
@@ -223,7 +222,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                 child: searchList()),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16),
               child: chatRoomList(),
             )
           ],
@@ -259,7 +257,7 @@ class chatTile extends StatelessWidget {
                 builder: (context) => ChatDetailPage(chatRoomId: chatRoomId)));
       },
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 5),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
         child: Row(
           children: <Widget>[
             Container(
