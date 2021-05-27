@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
+import 'package:sociaty_hub/constants/ConstantFunctions.dart';
 import 'package:sociaty_hub/models/ChatUser.dart';
+import 'package:sociaty_hub/screens/ChatDetailScreen.dart';
 import 'package:sociaty_hub/services/Database.dart';
-import 'package:sociaty_hub/widgets/conversationList.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -14,70 +16,106 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController searchController = TextEditingController();
   Database databaseReference = Database();
   dynamic searchText = "";
-  List<ChatUser> chatUsers = [
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/pic.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-    ChatUser(
-        name: "Jane Russel",
-        messageText: "Awesome Setup",
-        image: "asset/images/logo.png",
-        time: "Now"),
-  ];
-
+  Stream chatRoomStream;
   QuerySnapshot searchSnapshot;
+
+  Widget chatRoomList() {
+    // return Container();
+    return StreamBuilder(
+      stream: chatRoomStream,
+      builder: (context, snapshot) {
+        return snapshot.hasData
+            ? ListView.builder(
+                shrinkWrap: true,
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (context, index) {
+                  return chatTile(
+                      username: snapshot.data.docs[index]["chatroomid"]
+                          .toString()
+                          .replaceAll("_", '')
+                          .replaceAll(";", "")
+                          .replaceAll(ConstantAttributes.myName, ""),
+                      chatRoomId: snapshot.data.docs[index]["chatroomid"]);
+                })
+            : Container();
+      },
+    );
+  }
+
+  initiateSearch() {
+    print("first print");
+    setState(() {
+      Update();
+    });
+  }
+
+  Future<void> Update() async {
+    print("updating");
+    searchSnapshot = await databaseReference.getUserByUsername(searchText);
+  }
+
+  createChatRoom({String username}) {
+    if (username != ConstantAttributes.myName) {
+      String chatRoomId = getChatRoomId(username, ConstantAttributes.myName);
+      List<String> users = [username, ConstantAttributes.myName];
+      Map<String, dynamic> chatRoomMap = {
+        "users": users,
+        "chatroomid": chatRoomId
+      };
+      Database().createChatRoom(chatRoomId, chatRoomMap);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ChatDetailPage(chatRoomId: chatRoomId)));
+    } else {
+      print("u cant send a message to u ");
+    }
+  }
+
+  Widget SearchTile({String username, String email}) {
+    return Container(
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(username, style: TextStyle(fontSize: 22)),
+              Text(email),
+            ],
+          ),
+          Spacer(),
+          GestureDetector(
+            onTap: () {
+              createChatRoom(username: username);
+            },
+            child: Container(
+                decoration: BoxDecoration(
+                    color: blue, borderRadius: BorderRadius.circular(30)),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Text("Message")),
+          )
+        ],
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    getUserInfo();
+    super.initState();
+  }
+
+  getUserInfo() async {
+    ConstantAttributes.myName = await ConstantFunctions.getUserName();
+    setState(() {
+      databaseReference.getChatRooms(ConstantAttributes.myName).then((value) {
+        setState(() {
+          chatRoomStream = value;
+        });
+      });
+    });
+  }
 
   Widget searchList() {
     print("search querey is ${searchSnapshot.toString()}");
@@ -90,22 +128,10 @@ class _ChatScreenState extends State<ChatScreen> {
               print(searchSnapshot.docs.toString());
               print(searchSnapshot.docs[index]["email"]);
               return SearchTile(
-                  username: searchSnapshot.docs[index]["email"], email: "");
+                  username: searchSnapshot.docs[index]["name"],
+                  email: searchSnapshot.docs[index]["email"]);
             })
-        : null;
-  }
-
-  initiateSearch() {
-    print("first print");
-    setState(() {
-      Update();
-    });
-  }
-
-  createChatRoom() {}
-
-  Future<void> Update() async {
-    searchSnapshot = await databaseReference.getUserByUsername(searchText);
+        : Container();
   }
 
   @override
@@ -165,7 +191,7 @@ class _ChatScreenState extends State<ChatScreen> {
               padding: EdgeInsets.only(top: 16, left: 16, right: 16),
               child: TextField(
                 onChanged: (searchText) {
-                  setState(() => this.searchText = searchText);
+                  setState(() => this.searchText = searchText.toLowerCase());
                 },
                 controller: searchController,
                 decoration: InputDecoration(
@@ -179,7 +205,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     onTap: () {
                       initiateSearch();
-                      ;
                     },
                   ),
                   filled: true,
@@ -195,59 +220,67 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Padding(
-                padding: EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+                padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
                 child: searchList()),
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return ConversationList(
-                  name: chatUsers[index].name,
-                  messageText: chatUsers[index].messageText,
-                  image: chatUsers[index].image,
-                  time: chatUsers[index].time,
-                  isMessageRead: (index == 0 || index == 3) ? true : false,
-                );
-              },
-            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: chatRoomList(),
+            )
           ],
         ),
       ),
+      // appBar: AppBar(
+      //   title: Text("hello"),
+      // ),
+      // body: Container(child: chatRoomList()),
     );
   }
 }
 
-class SearchTile extends StatelessWidget {
-  final String username;
-  final String email;
+getChatRoomId(String a, String b) {
+  if (a.substring(0, 1).codeUnitAt(0) > b.substring(0, 1).codeUnitAt(0))
+    return "$b\_$a;";
+  else
+    return "$a\_$b;";
+}
 
-  SearchTile({this.username, this.email});
+class chatTile extends StatelessWidget {
+  final String username;
+  final String chatRoomId;
+  chatTile({this.username, this.chatRoomId});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(username),
-              Text(email),
-            ],
-          ),
-          Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ChatDetailPage(chatRoomId: chatRoomId)));
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5),
+        child: Row(
+          children: <Widget>[
+            Container(
+                alignment: Alignment.center,
+                height: 40,
+                width: 40,
+                child: Text(
+                  "${username.substring(0, 1).toUpperCase()}",
+                  style: TextStyle(color: white),
+                ),
                 decoration: BoxDecoration(
-                    color: blue, borderRadius: BorderRadius.circular(30)),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Text("Message")),
-          )
-        ],
+                    color: darkGrey, borderRadius: BorderRadius.circular(40))),
+            SizedBox(width: 8),
+            Text(
+              username,
+              style: TextStyle(
+                color: darkGrey,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

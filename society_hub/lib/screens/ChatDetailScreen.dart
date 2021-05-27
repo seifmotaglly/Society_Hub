@@ -1,23 +1,71 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
-import 'package:sociaty_hub/models/ChatMessage.dart';
+import 'package:sociaty_hub/services/Database.dart';
 
 class ChatDetailPage extends StatefulWidget {
+  final String chatRoomId;
+  ChatDetailPage({this.chatRoomId});
+
   @override
   _ChatDetailPageState createState() => _ChatDetailPageState();
 }
 
 class _ChatDetailPageState extends State<ChatDetailPage> {
-  List<ChatMessage> messages = [
-    ChatMessage(messageContent: "Hello, Will", messageType: "receiver"),
-    ChatMessage(messageContent: "How have you been?", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Hey Kriss, I am doing fine dude. wbu?",
-        messageType: "sender"),
-    ChatMessage(messageContent: "ehhhh, doing OK.", messageType: "receiver"),
-    ChatMessage(
-        messageContent: "Is there any thing wrong?", messageType: "sender"),
-  ];
+  final databaseReference = FirebaseFirestore.instance;
+  Database databaseRefrence = Database();
+  TextEditingController message = TextEditingController();
+
+  Stream chatMessageStream;
+
+  Widget chatMessagesList() {
+    return StreamBuilder(
+        stream: chatMessageStream,
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          print("this is snapshot");
+          return snapshot.hasData
+              ? ListView.builder(
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (context, index) {
+                    print(snapshot.data);
+                    return ChatMessage(
+                        message: snapshot.data.docs[index]["message"],
+                        isSender: ConstantAttributes.myName ==
+                            snapshot.data.docs[index]["sendBy"]);
+                  })
+              : Container();
+        });
+  }
+
+  sendMessage() {
+    Map<String, dynamic> messageMap;
+    if (message.text.isNotEmpty) {
+      messageMap = {
+        "message": message.text,
+        "sendBy": ConstantAttributes.myName,
+        'time': DateTime.now().microsecondsSinceEpoch
+      };
+    }
+
+    databaseRefrence.addConversationMessages(widget.chatRoomId, messageMap);
+
+    setState(() {
+      message.text = "";
+      message.clear();
+    });
+  }
+
+  @override
+  void initState() {
+    databaseRefrence.getConversationMessages(widget.chatRoomId).then((value) {
+      setState(() {
+        chatMessageStream = value;
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,36 +130,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ),
         body: Stack(
           children: <Widget>[
-            ListView.builder(
-              itemCount: messages.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 10, bottom: 10),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return Container(
-                  padding:
-                      EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
-                  child: Align(
-                    alignment: (messages[index].messageType == "receiver"
-                        ? Alignment.topLeft
-                        : Alignment.topRight),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: (messages[index].messageType == "receiver"
-                            ? Colors.grey.shade200
-                            : Colors.blue[200]),
-                      ),
-                      padding: EdgeInsets.all(16),
-                      child: Text(
-                        messages[index].messageContent,
-                        style: TextStyle(fontSize: 15),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
+            chatMessagesList(),
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(
@@ -121,27 +140,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                 color: darkGrey,
                 child: Row(
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Icon(
-                          Icons.add,
-                          color: darkGrey,
-                          size: 20,
-                        ),
-                      ),
-                    ),
                     SizedBox(
                       width: 15,
                     ),
                     Expanded(
                       child: TextField(
+                        onChanged: (message) {
+                          setState(() {
+                            this.message.text = message;
+                          });
+                        },
+                        textInputAction: TextInputAction.go,
+                        style: TextStyle(color: white),
                         decoration: InputDecoration(
                             hintText: "Write message...",
                             hintStyle: TextStyle(color: white),
@@ -152,7 +162,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       width: 15,
                     ),
                     FloatingActionButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        sendMessage();
+                      },
                       child: Icon(
                         Icons.send,
                         color: darkGrey,
@@ -166,6 +178,39 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               ),
             ),
           ],
+        ));
+  }
+}
+
+class ChatMessage extends StatelessWidget {
+  final String message;
+  final bool isSender;
+
+  ChatMessage({this.message, this.isSender});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+        alignment: isSender ? Alignment.topRight : Alignment.topLeft,
+        child: Container(
+          child: Text(
+            message,
+            style: TextStyle(fontSize: 15),
+          ),
+          padding: EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: isSender ? Colors.blue[200] : Colors.grey.shade200,
+              borderRadius: isSender
+                  ? BorderRadius.only(
+                      topLeft: Radius.circular(23),
+                      topRight: Radius.circular(23),
+                      bottomLeft: Radius.circular(23))
+                  : BorderRadius.only(
+                      topLeft: Radius.circular(23),
+                      topRight: Radius.circular(23),
+                      bottomRight: Radius.circular(23))),
         ));
   }
 }

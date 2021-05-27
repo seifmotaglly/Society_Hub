@@ -1,6 +1,8 @@
+import 'package:sociaty_hub/services/AuthService.dart';
+
 class SHUser {
   final String email;
-  final String userID;
+  final String username;
 
-  SHUser({this.email, this.userID});
+  SHUser({this.email, this.username});
 }

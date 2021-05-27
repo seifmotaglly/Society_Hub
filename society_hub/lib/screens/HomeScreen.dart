@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
+import 'package:sociaty_hub/models/SHUser.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthService _auth = AuthService();
+
   @override
   Widget build(BuildContext context) {
     print("in HomeScreen");

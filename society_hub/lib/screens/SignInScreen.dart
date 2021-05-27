@@ -1,9 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/constants/ConstantDecoration.dart';
+import 'package:sociaty_hub/constants/ConstantFunctions.dart';
+import 'package:sociaty_hub/models/SHUser.dart';
 import 'package:sociaty_hub/screens/HomeScreen.dart';
 import 'package:sociaty_hub/screens/SignUpScreen.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
+import 'package:sociaty_hub/services/Database.dart';
 import 'package:string_validator/string_validator.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -21,6 +26,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SHUser user = Provider.of<SHUser>(context);
     return Scaffold(
       backgroundColor: darkGrey,
       body: SafeArea(
@@ -87,6 +93,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           setState(() => err = "something went wrong");
                           print(err);
                         } else {
+                          Database databaseReference = Database();
+                          QuerySnapshot snapshot =
+                              await databaseReference.getUserByEmail(email);
+                          String username = snapshot.docs[0]["name"];
+                          ConstantFunctions.saveEmail(email);
+                          ConstantFunctions.saveUserName(username);
                           Navigator.push(
                               context,
                               MaterialPageRoute(

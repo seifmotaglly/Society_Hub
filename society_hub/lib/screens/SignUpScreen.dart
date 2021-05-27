@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/constants/ConstantDecoration.dart';
+import 'package:sociaty_hub/constants/ConstantFunctions.dart';
 import 'package:sociaty_hub/screens/SignInScreen.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
 import 'package:sociaty_hub/services/Database.dart';
@@ -102,6 +103,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             "email": email
                           };
                           databaseRefrence.uploadUserDate(userInfoMap);
+                          ConstantFunctions.saveEmail(email);
+                          ConstantFunctions.saveUserName(userName);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
