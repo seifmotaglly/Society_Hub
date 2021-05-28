@@ -24,7 +24,7 @@ class WelcomeScreen extends StatelessWidget {
                           style: TextStyle(color: Colors.white),
                           children: <TextSpan>[
                         TextSpan(
-                            text: "Sociaty ",
+                            text: "Society ",
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 18)),
                         TextSpan(

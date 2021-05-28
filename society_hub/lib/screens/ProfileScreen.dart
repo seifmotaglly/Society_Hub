@@ -26,7 +26,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isLoading = false;
   bool isFriend = false;
   bool isProfileOwner = false;
-  int postCount = 0;
   void initState() {
     super.initState();
     print('Profile ID: ${widget.profileId}');
@@ -37,24 +36,116 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     print("in Profile");
     return Scaffold(
-      backgroundColor: white,
       appBar: AppBar(
         title: Text(
           'Profile',
           style: TextStyle(
             fontFamily: 'Julee',
-            fontStyle: FontStyle.italic,
             fontWeight: FontWeight.bold,
           ),
         ),
+        leading: BackButton(),
         backgroundColor: darkGrey,
       ),
       body: ListView(
         children: [
-          buildProfileHeader(),
+          buildProfileHeader2(),
           Divider(),
         ],
       ),
+    );
+  }
+
+  buildProfileHeader2() {
+    return FutureBuilder<DocumentSnapshot>(
+      future: usersRef.doc(widget.profileId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        //Test data existence
+        if (!snapshot.hasData) {
+          return circularProgress();
+        }
+        User user = User.fromDocument(snapshot.data);
+        return Stack(
+          children: [
+            SizedBox(
+              height: 200,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                imageUrl: user.photoUrl,
+                imageBuilder: (context, imageProvider) => Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: imageProvider,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.fromLTRB(16.0, 150.0, 16.0, 16.0),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.all(16.0),
+                        margin: EdgeInsets.only(top: 16.0),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(left: 96.0),
+                              child: Wrap(
+                                direction: Axis.horizontal,
+                                children: [
+                                  Text(
+                                    user.username,
+                                    style:
+                                        Theme.of(context).textTheme.headline5,
+                                  ),
+                                  Text('(${user.displayName})')
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 10.0),
+                            Row(
+                              children: [
+                                Expanded(child: buildProfileButton()),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(user.bio),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 80,
+                        width: 80,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                            image: DecorationImage(
+                                image: NetworkImage(user.photoUrl),
+                                fit: BoxFit.cover)),
+                        margin: EdgeInsets.only(left: 16.0),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -69,72 +160,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
   }
 
-  buildProfileHeader() {
-    print('in Future Builder');
-    return FutureBuilder<DocumentSnapshot>(
-      future: usersRef.doc(widget.profileId).get(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        //Test data existence
-        if (!snapshot.hasData) {
-          return circularProgress();
-        }
-        // if (snapshot.hasData && !snapshot.data.exists) {
-        //   return Text('Doc doesnt exist');
-        // }
-        // if (snapshot.connectionState == ConnectionState.done) {
-        //   Map<String, dynamic> data = snapshot.data.data();
-        //   return Text("Full Name: ${data['name']} ${data['email']}");
-        // }
-        // return Text("loading");
-        User user = User.fromDocument(snapshot.data);
-        return Padding(
-          padding: EdgeInsets.all(10.0),
-          child: Column(
-            children: <Widget>[
-              Wrap(
-                direction: Axis.horizontal,
-                children: <Widget>[
-                  Center(
-                    child: CircleAvatar(
-                        radius: 40.0,
-                        backgroundColor: Colors.grey,
-                        backgroundImage:
-                            CachedNetworkImageProvider(user.photoUrl)),
-                  ),
-                  Row(
-                    children: <Widget>[buildProfileButton()],
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  )
-                ],
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 12.0),
-                child: Text(
-                  user.username,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 4),
-                child: Text(
-                  user.displayName,
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(top: 2),
-                child: Text(user.bio),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
+  // buildProfileHeader1() {
+  //   print('in Future Builder');
+  //   return FutureBuilder<DocumentSnapshot>(
+  //     future: usersRef.doc(widget.profileId).get(),
+  //     builder:
+  //         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  //       //Test data existence
+  //       if (!snapshot.hasData) {
+  //         return circularProgress();
+  //       }
+  //       // if (snapshot.hasData && !snapshot.data.exists) {
+  //       //   return Text('Doc doesnt exist');
+  //       // }
+  //       // if (snapshot.connectionState == ConnectionState.done) {
+  //       //   Map<String, dynamic> data = snapshot.data.data();
+  //       //   return Text("Full Name: ${data['name']} ${data['email']}");
+  //       // }
+  //       // return Text("loading");
+  //       User user = User.fromDocument(snapshot.data);
+  //       return Padding(
+  //         padding: EdgeInsets.all(10.0),
+  //         child: Column(
+  //           children: <Widget>[
+  //             Wrap(
+  //               direction: Axis.horizontal,
+  //               children: <Widget>[
+  //                 Center(
+  //                   child: CircleAvatar(
+  //                       radius: 40.0,
+  //                       backgroundColor: Colors.grey,
+  //                       backgroundImage:
+  //                           CachedNetworkImageProvider(user.photoUrl)),
+  //                 ),
+  //                 Row(
+  //                   children: <Widget>[buildProfileButton()],
+  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //                 )
+  //               ],
+  //             ),
+  //             Container(
+  //               alignment: Alignment.centerLeft,
+  //               padding: EdgeInsets.only(top: 12.0),
+  //               child: Text(
+  //                 user.username,
+  //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
+  //               ),
+  //             ),
+  //             Container(
+  //               alignment: Alignment.centerLeft,
+  //               padding: EdgeInsets.only(top: 4),
+  //               child: Text(
+  //                 user.displayName,
+  //                 style: TextStyle(fontWeight: FontWeight.bold),
+  //               ),
+  //             ),
+  //             Container(
+  //               alignment: Alignment.centerLeft,
+  //               padding: EdgeInsets.only(top: 2),
+  //               child: Text(user.bio),
+  //             )
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //   );
+  // }
 
   buildProfileButton() {
     print("id");
