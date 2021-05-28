@@ -77,4 +77,15 @@ class Database {
       print(e.toString());
     }
   }
+
+  getPost() async {
+    try {
+      return await databaseReference
+          .collection("posts")
+          .orderBy("time", descending: true)
+          .get();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }
