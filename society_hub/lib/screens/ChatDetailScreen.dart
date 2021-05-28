@@ -130,7 +130,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ),
         body: Stack(
           children: <Widget>[
-            chatMessagesList(),
+            Container(
+              margin: EdgeInsets.only(bottom: 60),
+              child: chatMessagesList(),
+            ),
             Align(
               alignment: Alignment.bottomLeft,
               child: Container(

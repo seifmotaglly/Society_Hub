@@ -62,4 +62,12 @@ class Database {
         .where("users", arrayContains: username)
         .snapshots();
   }
+
+  readMessage(
+      String username, String username2, String chatRoomId, bool isRead2) {
+    print("balsadsasdalmg;sdjg");
+    databaseReference.collection("ChatRoom").doc(chatRoomId).update({
+      "isRead": {username: true, username2: isRead2}
+    });
+  }
 }

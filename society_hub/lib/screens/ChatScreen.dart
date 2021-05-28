@@ -28,13 +28,17 @@ class _ChatScreenState extends State<ChatScreen> {
                 shrinkWrap: true,
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (context, index) {
+                  String username = snapshot.data.docs[index]["chatroomid"]
+                      .toString()
+                      .replaceAll("_", '')
+                      .replaceAll(";", "")
+                      .replaceAll(ConstantAttributes.myName, "");
                   return chatTile(
-                      username: snapshot.data.docs[index]["chatroomid"]
-                          .toString()
-                          .replaceAll("_", '')
-                          .replaceAll(";", "")
-                          .replaceAll(ConstantAttributes.myName, ""),
-                      chatRoomId: snapshot.data.docs[index]["chatroomid"]);
+                      username: username,
+                      chatRoomId: snapshot.data.docs[index]["chatroomid"],
+                      isRead: snapshot.data.docs[index]["isRead"]
+                          [ConstantAttributes.myName.toString()],
+                      isRead2: snapshot.data.docs[index]["isRead"][username]);
                 })
             : Container();
       },
@@ -57,9 +61,14 @@ class _ChatScreenState extends State<ChatScreen> {
     if (username != ConstantAttributes.myName) {
       String chatRoomId = getChatRoomId(username, ConstantAttributes.myName);
       List<String> users = [username, ConstantAttributes.myName];
+      Map<String, bool> isRead = {
+        ConstantAttributes.myName.toString(): false,
+        username.toString(): false
+      };
       Map<String, dynamic> chatRoomMap = {
         "users": users,
-        "chatroomid": chatRoomId
+        "chatroomid": chatRoomId,
+        "isRead": isRead
       };
       Database().createChatRoom(chatRoomId, chatRoomMap);
       Navigator.push(
@@ -73,6 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget SearchTile({String username, String email}) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Row(
         children: <Widget>[
           Column(
@@ -242,19 +252,33 @@ getChatRoomId(String a, String b) {
     return "$a\_$b;";
 }
 
-class chatTile extends StatelessWidget {
+class chatTile extends StatefulWidget {
   final String username;
   final String chatRoomId;
-  chatTile({this.username, this.chatRoomId});
+  bool isRead;
+  bool isRead2;
+  chatTile({this.username, this.chatRoomId, this.isRead, this.isRead2});
 
+  @override
+  _chatTileState createState() => _chatTileState();
+}
+
+class _chatTileState extends State<chatTile> {
+  Database _database = Database();
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        _database.readMessage(ConstantAttributes.myName, widget.username,
+            widget.chatRoomId, widget.isRead2);
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => ChatDetailPage(chatRoomId: chatRoomId)));
+                builder: (context) =>
+                    ChatDetailPage(chatRoomId: widget.chatRoomId)));
+        setState(() {
+          widget.isRead = true;
+        });
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
@@ -265,14 +289,16 @@ class chatTile extends StatelessWidget {
                 height: 40,
                 width: 40,
                 child: Text(
-                  "${username.substring(0, 1).toUpperCase()}",
-                  style: TextStyle(color: white),
+                  "${widget.username.substring(0, 1).toUpperCase()}",
+                  style: widget.isRead
+                      ? TextStyle(color: white)
+                      : TextStyle(color: Colors.red),
                 ),
                 decoration: BoxDecoration(
                     color: darkGrey, borderRadius: BorderRadius.circular(40))),
             SizedBox(width: 8),
             Text(
-              username,
+              widget.username,
               style: TextStyle(
                 color: darkGrey,
               ),
