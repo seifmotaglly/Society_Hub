@@ -4,6 +4,7 @@ import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/models/SHUser.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
+import 'package:sociaty_hub/services/Database.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthService _auth = AuthService();
@@ -115,60 +116,49 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget makeFeed({userName, userImage, feedTime, feedText, feedImage}) {
+    Database database = Database();
+
+    Map<String, String> postMap = {"name": userName, "post": feedText};
+
+    database.uploadPost(postMap);
+
     return Container(
       margin: EdgeInsets.only(top: 10),
       color: lightGrey,
       child: Column(children: [
         Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                  image: AssetImage(userImage), fit: BoxFit.cover)),
-        ),
-        Container(
           decoration: BoxDecoration(
               color: white,
               borderRadius: BorderRadius.all(Radius.circular(15))),
-          padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+          padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 10),
           margin: EdgeInsets.only(bottom: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      // Container(
-                      //   width: 50,
-                      //   height: 50,
-                      //   decoration: BoxDecoration(
-                      //       shape: BoxShape.circle,
-                      //       image: DecorationImage(
-                      //           image: AssetImage(userImage),
-                      //           fit: BoxFit.cover)),
-                      // ),
-                      SizedBox(
-                        width: 10,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[],
-                      )
-                    ],
+              Center(
+                child: Transform.translate(
+                  offset: Offset(0, -20),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            image: AssetImage(userImage), fit: BoxFit.cover)),
                   ),
-                ],
+                ),
               ),
-              Align(
-                child: Text(
-                  userName,
-                  style: TextStyle(
-                      color: Colors.grey[900],
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
+              Transform.translate(
+                offset: Offset(0, -10),
+                child: Align(
+                  child: Text(
+                    userName,
+                    style: TextStyle(
+                        color: Colors.grey[900],
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1),
+                  ),
                 ),
               ),
               SizedBox(
@@ -191,55 +181,55 @@ class HomeScreen extends StatelessWidget {
                     height: 1.5,
                     letterSpacing: .7),
               ),
-              SizedBox(
-                height: 20,
-              ),
-              feedImage != ''
-                  ? Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          image: DecorationImage(
-                              image: AssetImage(feedImage), fit: BoxFit.cover)),
-                    )
-                  : Container(),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      makeLike(),
-                      Transform.translate(
-                          offset: Offset(-5, 0), child: makeLove()),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        "2.5K",
-                        style: TextStyle(fontSize: 15, color: Colors.grey[800]),
-                      )
-                    ],
-                  ),
-                  Text(
-                    "400 Comments",
-                    style: TextStyle(fontSize: 13, color: Colors.grey[800]),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  makeLikeButton(isActive: true),
-                  makeCommentButton(),
-                  makeShareButton(),
-                ],
-              )
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // feedImage != ''
+              //     ? Container(
+              //         height: 200,
+              //         decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.circular(10),
+              //             image: DecorationImage(
+              //                 image: AssetImage(feedImage), fit: BoxFit.cover)),
+              //       )
+              //     : Container(),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget>[
+              //     Row(
+              //       children: <Widget>[
+              //         makeLike(),
+              //         Transform.translate(
+              //             offset: Offset(-5, 0), child: makeLove()),
+              //         SizedBox(
+              //           width: 5,
+              //         ),
+              //         Text(
+              //           "2.5K",
+              //           style: TextStyle(fontSize: 15, color: Colors.grey[800]),
+              //         )
+              //       ],
+              //     ),
+              //     Text(
+              //       "400 Comments",
+              //       style: TextStyle(fontSize: 13, color: Colors.grey[800]),
+              //     )
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: 20,
+              // ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: <Widget>[
+              //     makeLikeButton(isActive: true),
+              //     makeCommentButton(),
+              //     makeShareButton(),
+              //   ],
+              // )
             ],
           ),
         )
@@ -247,110 +237,110 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget makeLike() {
-    return Container(
-      width: 25,
-      height: 25,
-      decoration: BoxDecoration(
-          color: Colors.blue,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)),
-      child: Center(
-        child: Icon(Icons.thumb_up, size: 12, color: Colors.white),
-      ),
-    );
-  }
+//   Widget makeLike() {
+//     return Container(
+//       width: 25,
+//       height: 25,
+//       decoration: BoxDecoration(
+//           color: Colors.blue,
+//           shape: BoxShape.circle,
+//           border: Border.all(color: Colors.white)),
+//       child: Center(
+//         child: Icon(Icons.thumb_up, size: 12, color: Colors.white),
+//       ),
+//     );
+//   }
 
-  Widget makeLove() {
-    return Container(
-      width: 25,
-      height: 25,
-      decoration: BoxDecoration(
-          color: Colors.red,
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.white)),
-      child: Center(
-        child: Icon(Icons.favorite, size: 12, color: Colors.white),
-      ),
-    );
-  }
+//   Widget makeLove() {
+//     return Container(
+//       width: 25,
+//       height: 25,
+//       decoration: BoxDecoration(
+//           color: Colors.red,
+//           shape: BoxShape.circle,
+//           border: Border.all(color: Colors.white)),
+//       child: Center(
+//         child: Icon(Icons.favorite, size: 12, color: Colors.white),
+//       ),
+//     );
+//   }
 
-  Widget makeLikeButton({isActive}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[200]),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.thumb_up,
-              color: isActive ? Colors.blue : Colors.grey,
-              size: 18,
-            ),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Like",
-              style: TextStyle(color: isActive ? Colors.blue : Colors.grey),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+//   Widget makeLikeButton({isActive}) {
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+//       decoration: BoxDecoration(
+//         border: Border.all(color: Colors.grey[200]),
+//         borderRadius: BorderRadius.circular(50),
+//       ),
+//       child: Center(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             Icon(
+//               Icons.thumb_up,
+//               color: isActive ? Colors.blue : Colors.grey,
+//               size: 18,
+//             ),
+//             SizedBox(
+//               width: 5,
+//             ),
+//             Text(
+//               "Like",
+//               style: TextStyle(color: isActive ? Colors.blue : Colors.grey),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-  Widget makeCommentButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[200]),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.chat, color: Colors.grey, size: 18),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Comment",
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+//   Widget makeCommentButton() {
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+//       decoration: BoxDecoration(
+//         border: Border.all(color: Colors.grey[200]),
+//         borderRadius: BorderRadius.circular(50),
+//       ),
+//       child: Center(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             Icon(Icons.chat, color: Colors.grey, size: 18),
+//             SizedBox(
+//               width: 5,
+//             ),
+//             Text(
+//               "Comment",
+//               style: TextStyle(color: Colors.grey),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 
-  Widget makeShareButton() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey[200]),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(Icons.share, color: Colors.grey, size: 18),
-            SizedBox(
-              width: 5,
-            ),
-            Text(
-              "Share",
-              style: TextStyle(color: Colors.grey),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+//   Widget makeShareButton() {
+//     return Container(
+//       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+//       decoration: BoxDecoration(
+//         border: Border.all(color: Colors.grey[200]),
+//         borderRadius: BorderRadius.circular(50),
+//       ),
+//       child: Center(
+//         child: Row(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           children: <Widget>[
+//             Icon(Icons.share, color: Colors.grey, size: 18),
+//             SizedBox(
+//               width: 5,
+//             ),
+//             Text(
+//               "Share",
+//               style: TextStyle(color: Colors.grey),
+//             )
+//           ],
+//         ),
+//       ),
+//     );
+//   }
 }

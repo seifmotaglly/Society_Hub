@@ -65,9 +65,17 @@ class Database {
 
   readMessage(
       String username, String username2, String chatRoomId, bool isRead2) {
-    print("balsadsasdalmg;sdjg");
     databaseReference.collection("ChatRoom").doc(chatRoomId).update({
       "isRead": {username: true, username2: isRead2}
     });
+  }
+
+  uploadPost(postMap) {
+    print("heeel");
+    try {
+      databaseReference.collection("posts").add(postMap);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }
