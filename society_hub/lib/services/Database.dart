@@ -83,7 +83,7 @@ class Database {
       return await databaseReference
           .collection("posts")
           .orderBy("time", descending: true)
-          .get();
+          .snapshots();
     } catch (e) {
       print(e.toString());
     }

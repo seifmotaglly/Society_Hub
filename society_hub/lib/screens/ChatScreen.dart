@@ -82,7 +82,10 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget SearchTile({String username, String email}) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      height: 40,
+      width: double.infinity,
+      color: lightGrey,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Row(
         children: <Widget>[
           Column(
@@ -146,102 +149,18 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SafeArea(
-              child: Padding(
-                padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      "Conversations",
-                      style: TextStyle(
-                          color: darkGrey,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      padding:
-                          EdgeInsets.only(left: 8, right: 8, top: 2, bottom: 2),
-                      height: 30,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        color: blue,
-                      ),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.add,
-                            color: Colors.blue[900],
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(
-                            "Add New",
-                            style: TextStyle(
-                                color: darkGrey,
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 16, left: 16, right: 16),
-              child: TextField(
-                onChanged: (searchText) {
-                  setState(() => this.searchText = searchText.toLowerCase());
-                },
-                controller: searchController,
-                decoration: InputDecoration(
-                  hintText: "Search...",
-                  hintStyle: TextStyle(color: Colors.grey[600]),
-                  prefixIcon: GestureDetector(
-                    child: Icon(
-                      Icons.search,
-                      color: Colors.grey[600],
-                      size: 20,
-                    ),
-                    onTap: () {
-                      initiateSearch();
-                    },
-                  ),
-                  filled: true,
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.white)),
-                  fillColor: Colors.grey[300],
-                  contentPadding: EdgeInsets.all(8),
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.white)),
-                ),
-              ),
-            ),
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 1, vertical: 1),
-                child: searchList()),
-            Container(
-              child: chatRoomList(),
-            )
-          ],
+        appBar: AppBar(
+          backgroundColor: darkGrey,
+          title: Text("Chats"),
         ),
-      ),
-      // appBar: AppBar(
-      //   title: Text("hello"),
-      // ),
-      // body: Container(child: chatRoomList()),
-    );
+        body: Stack(
+          children: [chatRoomList()],
+        )
+        // appBar: AppBar(
+        //   title: Text("hello"),
+        // ),
+        // body: Container(child: chatRoomList()),
+        );
   }
 }
 
@@ -281,7 +200,10 @@ class _chatTileState extends State<chatTile> {
         });
       },
       child: Container(
+        color: lightGrey,
+        width: double.infinity,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+        margin: EdgeInsets.symmetric(vertical: 5),
         child: Row(
           children: <Widget>[
             Container(
