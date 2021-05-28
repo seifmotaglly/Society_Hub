@@ -4,10 +4,12 @@ import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantFunctions.dart';
 import 'package:sociaty_hub/models/SHUser.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
-import 'package:sociaty_hub/services/AuthService.dart';
 import 'package:sociaty_hub/widgets/bottombar/bottombar.dart';
 
 class Wrapper extends StatefulWidget {
+  final String currentUserId;
+
+  Wrapper({this.currentUserId});
   @override
   _WrapperState createState() => _WrapperState();
 }

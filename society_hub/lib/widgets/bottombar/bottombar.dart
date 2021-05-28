@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:sociaty_hub/screens/ChatScreen.dart';
 import 'package:sociaty_hub/screens/ProfileScreen.dart';
+import 'package:sociaty_hub/screens/SearchScreen.dart';
 import '../../constants/ConstantColors.dart';
 import '../../screens/HomeScreen.dart';
 
 class BottomBar extends StatefulWidget {
+  final String currentUserId;
+
+  BottomBar({this.currentUserId});
   @override
   _BottomBarState createState() => _BottomBarState();
 }
@@ -14,7 +18,13 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int currIndex = 0;
   PageTransitionType pageTransitionType = PageTransitionType.fade;
-  List<Widget> widgetOption = [HomeScreen(), ProfileScreen(), ChatScreen()];
+  List<Widget> widgetOption = [
+    HomeScreen(),
+    //pass el current user id here instade of this, its for testing
+    ProfileScreen(profileId: 'YUf6xZx3sVLGPKalnlHg'),
+    ChatScreen(),
+    Search()
+  ];
   _onIconTapped(int index) {
     setState(() {
       if (currIndex != index) {
@@ -47,6 +57,10 @@ class _BottomBarState extends State<BottomBar> {
           ),
           Icon(
             Icons.list,
+            color: white,
+          ),
+          Icon(
+            Icons.search,
             color: white,
           ),
         ],
