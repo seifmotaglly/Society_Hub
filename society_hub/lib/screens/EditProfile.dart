@@ -16,10 +16,10 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
-  TextEditingController bioController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
   bool isLoading = false;
   User user;
-  bool bioValidation = true;
+  bool userNameValidation = true;
   bool displayNameValidation = true;
 
   @override
@@ -35,7 +35,7 @@ class _EditProfileState extends State<EditProfile> {
     DocumentSnapshot doc = await usersRef.doc(widget.currentUserId).get();
     user = User.fromDocument(doc);
     displayNameController.text = user.displayName;
-    bioController.text = user.bio;
+    userNameController.text = user.username;
     setState(() {
       isLoading = false;
     });
@@ -55,7 +55,7 @@ class _EditProfileState extends State<EditProfile> {
         TextField(
           controller: displayNameController,
           decoration: InputDecoration(
-              hintText: 'Update nickname',
+              hintText: 'Update Display Name',
               errorText:
                   displayNameValidation ? null : 'Display name too short'),
         )
@@ -63,22 +63,22 @@ class _EditProfileState extends State<EditProfile> {
     );
   }
 
-  Column bioField() {
+  Column userNameField() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Padding(
           padding: EdgeInsets.only(top: 12),
           child: Text(
-            'Bio',
+            'User Name',
             style: TextStyle(color: Colors.grey),
           ),
         ),
         TextField(
-          controller: bioController,
+          controller: userNameController,
           decoration: InputDecoration(
-              hintText: 'Update bio',
-              errorText: bioValidation ? null : 'Bio too long'),
+              hintText: 'Update User Name',
+              errorText: userNameValidation ? null : 'User name too short'),
         )
       ],
     );
@@ -91,14 +91,14 @@ class _EditProfileState extends State<EditProfile> {
           ? displayNameValidation = false
           : displayNameValidation = true;
 
-      bioController.text.trim().length > 100
-          ? bioValidation = false
-          : bioValidation = true;
+      userNameController.text.trim().length > 100
+          ? userNameValidation = false
+          : userNameValidation = true;
 
-      if (displayNameValidation && bioValidation) {
+      if (displayNameValidation && userNameValidation) {
         usersRef.doc(widget.currentUserId).update({
           'display_name': displayNameController.text,
-          'bio': bioController.text
+          'name': userNameController.text
         });
       }
     });
@@ -147,7 +147,10 @@ class _EditProfileState extends State<EditProfile> {
                       Padding(
                         padding: EdgeInsets.all(16),
                         child: Column(
-                          children: <Widget>[displayNameField(), bioField()],
+                          children: <Widget>[
+                            displayNameField(),
+                            userNameField()
+                          ],
                         ),
                       ),
                       ElevatedButton(

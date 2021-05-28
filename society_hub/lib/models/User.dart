@@ -19,7 +19,7 @@ class User {
   factory User.fromDocument(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data();
     return User(
-        id: data['id'],
+        id: doc.id,
         username: data['name'],
         email: data['email'],
         displayName: data['display_name'],
