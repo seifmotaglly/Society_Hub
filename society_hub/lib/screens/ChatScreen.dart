@@ -116,7 +116,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   getUserInfo() async {
-    ConstantAttributes.myName = await ConstantFunctions.getUserName();
+    // ConstantAttributes.myName = await ConstantFunctions.getUserName();
     setState(() {
       databaseReference.getChatRooms(ConstantAttributes.myName).then((value) {
         setState(() {

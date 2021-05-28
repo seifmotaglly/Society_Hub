@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
+import 'package:sociaty_hub/constants/ConstantAttributes.dart';
+import 'package:sociaty_hub/constants/ConstantFunctions.dart';
 import 'package:sociaty_hub/models/SHUser.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
@@ -21,8 +23,13 @@ class _WrapperState extends State<Wrapper> {
       print("goint to Welcome Screen");
       return WelcomeScreen();
     } else {
+      setName();
       print("going to hom11e Screen");
       return BottomBar();
     }
   }
+}
+
+setName() async {
+  ConstantAttributes.myName = await ConstantFunctions.getUserName();
 }
