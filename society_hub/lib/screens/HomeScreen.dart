@@ -79,55 +79,57 @@ class _HomeScreenState extends State<HomeScreen> {
         body: Stack(
           // crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Container(
-              color: lightGrey,
-              padding:
-                  EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: Colors.white),
-                      child: TextField(
-                        onChanged: (value) {
-                          setState(() {
-                            text = value;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          border: InputBorder.none,
-                          hintStyle: TextStyle(color: Colors.grey),
-                          hintText: "Create Post",
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.send),
-                    color: Colors.grey[800],
-                    onPressed: () {
-                      uploadFeed(
-                          userName: ConstantAttributes.myName, feedText: text);
-                    },
-                  ),
-                ],
-              ),
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: EdgeInsets.all(15),
-                  child: newsFeedList(),
-                ),
-              ),
-            )
+            SizedBox(height: 15),
+            newsFeedList()
+            // Container(
+            //   color: lightGrey,
+            //   padding:
+            //       EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
+            //   child: Row(
+            //     children: <Widget>[
+            //       Expanded(
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(50),
+            //               color: Colors.white),
+            //           child: TextField(
+            //             onChanged: (value) {
+            //               setState(() {
+            //                 text = value;
+            //               });
+            //             },
+            //             decoration: InputDecoration(
+            //               contentPadding: EdgeInsets.symmetric(horizontal: 10),
+            //               border: InputBorder.none,
+            //               hintStyle: TextStyle(color: Colors.grey),
+            //               hintText: "Create Post",
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //       SizedBox(
+            //         width: 20,
+            //       ),
+            //       IconButton(
+            //         icon: Icon(Icons.send),
+            //         color: Colors.grey[800],
+            //         onPressed: () {
+            //           uploadFeed(
+            //               userName: ConstantAttributes.myName, feedText: text);
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // Expanded(
+            //   child: SingleChildScrollView(
+            //     scrollDirection: Axis.vertical,
+            //     child: Padding(
+            //       padding: EdgeInsets.all(15),
+            //       child: newsFeedList(),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -148,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget makeFeed({String username, String text}) {
     return Container(
-        margin: EdgeInsets.only(top: 10),
+        margin: EdgeInsets.only(top: 20),
         color: lightGrey,
         child: Column(children: [
           Container(
