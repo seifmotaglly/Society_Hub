@@ -2,10 +2,12 @@ import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:sociaty_hub/models/SHUser.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
-import 'package:sociaty_hub/services/AuthService.dart';
 import 'package:sociaty_hub/widgets/bottombar/bottombar.dart';
 
 class Wrapper extends StatefulWidget {
+  final String currentUserId;
+
+  Wrapper({this.currentUserId});
   @override
   _WrapperState createState() => _WrapperState();
 }
