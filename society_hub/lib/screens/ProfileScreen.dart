@@ -7,20 +7,10 @@ import 'package:sociaty_hub/widgets/progress.dart';
 
 import '../constants/ConstantColors.dart';
 
-final DateTime timestamp = DateTime.now();
-User currentUser;
-
-// final StorageReference storageRef = FirebaseStorage.instance.ref();
 final CollectionReference usersRef =
     FirebaseFirestore.instance.collection('users');
-final CollectionReference postsRef =
-    FirebaseFirestore.instance.collection('posts');
-final CollectionReference commentsRef =
-    FirebaseFirestore.instance.collection('comments');
 final CollectionReference friendsRef =
     FirebaseFirestore.instance.collection('friends');
-final CollectionReference timelineRef =
-    FirebaseFirestore.instance.collection('timeline');
 
 class ProfileScreen extends StatefulWidget {
   final String profileId;
@@ -31,21 +21,12 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final String currentUserId = "useridhere";
-  String profileId = "YUf6xZx3sVLGPKalnlHg";
+  final String currentUserId = "YUf6xZx3sVLGPKalnlHg";
+  //String profileId = "YUf6xZx3sVLGPKalnlHg"; testing id
   bool isLoading = false;
   bool isFriend = false;
   bool isProfileOwner = false;
   int postCount = 0;
-  // User user = new User(
-  //     id: "id",
-  //     username: "Diaa Jamal",
-  //     photoUrl:
-  //         "https://qph.fs.quoracdn.net/main-qimg-20df28f3b31895e56cba6dbc0515c635",
-  //     email: "this.email",
-  //     displayName: "Leavei",
-  //     bio: "Our collage is shieeet");
-
   void initState() {
     super.initState();
     print('Profile ID: ${widget.profileId}');
@@ -89,12 +70,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   buildProfileHeader() {
-    return FutureBuilder(
-      future: usersRef.doc(profileId).get(),
-      builder: (context, snapshot) {
+    print('in Future Builder');
+    return FutureBuilder<DocumentSnapshot>(
+      future: usersRef.doc(widget.profileId).get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+        //Test data existence
         if (!snapshot.hasData) {
           return circularProgress();
         }
+        // if (snapshot.hasData && !snapshot.data.exists) {
+        //   return Text('Doc doesnt exist');
+        // }
+        // if (snapshot.connectionState == ConnectionState.done) {
+        //   Map<String, dynamic> data = snapshot.data.data();
+        //   return Text("Full Name: ${data['name']} ${data['email']}");
+        // }
+        // return Text("loading");
         User user = User.fromDocument(snapshot.data);
         return Padding(
           padding: EdgeInsets.all(10.0),
@@ -110,16 +102,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         backgroundImage:
                             CachedNetworkImageProvider(user.photoUrl)),
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[buildProfileButton()],
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        )
-                      ],
-                    ),
+                  Row(
+                    children: <Widget>[buildProfileButton()],
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   )
                 ],
               ),

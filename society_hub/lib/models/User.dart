@@ -17,19 +17,13 @@ class User {
       this.bio});
 
   factory User.fromDocument(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data();
     return User(
-        id: doc.get('id'),
-        username: doc.get('name'),
-        email: doc.get('email'),
-        displayName: doc.get('displayName'),
-        photoUrl: doc.get('photoUrl'),
-        bio: doc.get('bio'));
-
-    // id: doc.data['id'],
-    // username: doc.data()['name'],
-    // email: doc.data()['email'],
-    // displayName: doc.data()['displayName'],
-    // photoUrl: doc.data()['photoUrl'],
-    // bio: doc.data();
+        id: data['id'],
+        username: data['name'],
+        email: data['email'],
+        displayName: data['display_name'],
+        photoUrl: data['photo_url'],
+        bio: data['bio']);
   }
 }
