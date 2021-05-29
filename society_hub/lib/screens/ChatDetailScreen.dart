@@ -17,7 +17,7 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final databaseReference = FirebaseFirestore.instance;
   Database databaseRefrence = Database();
-  final message = TextEditingController();
+  final messageController = TextEditingController();
 
   Stream chatMessageStream;
 
@@ -42,9 +42,9 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   sendMessage() {
     Map<String, dynamic> messageMap;
-    if (message.text.isNotEmpty) {
+    if (messageController.text.isNotEmpty) {
       messageMap = {
-        "message": message.text,
+        "message": messageController.text,
         "sendBy": ConstantAttributes.myName,
         'time': DateTime.now().microsecondsSinceEpoch
       };
@@ -53,8 +53,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     databaseRefrence.addConversationMessages(widget.chatRoomId, messageMap);
 
     setState(() {
-      message.text = "";
-      message.clear();
+      messageController.clear();
     });
   }
 
@@ -150,10 +149,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     ),
                     Expanded(
                       child: TextField(
-                        controller: message,
-                        onChanged: (message) {
+                        textDirection: TextDirection.ltr,
+                        controller: messageController,
+                        onChanged: (value) {
                           setState(() {
-                            this.message.text = message;
+                            this.messageController.text = value;
                           });
                         },
                         textInputAction: TextInputAction.go,

@@ -32,6 +32,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool isFriend = false;
   bool isProfileOwner = false;
   void initState() {
+    print("current user is ");
+    print(currentUserId.toString());
+    print("profile is ");
+    print(widget.profileId.toString());
     super.initState();
     print('Profile ID: ${widget.profileId}');
     checkIfFriend();
@@ -158,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     DocumentSnapshot doc = await friendsRef
         .doc(widget.profileId)
         .collection('userFriends')
-        .doc()
+        .doc(currentUserId)
         .get();
     setState(() {
       isFriend = doc.exists;

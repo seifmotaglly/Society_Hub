@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
+import 'package:sociaty_hub/screens/Wrapper.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -8,6 +9,16 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Wrapper()));
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(

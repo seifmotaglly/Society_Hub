@@ -4,6 +4,7 @@ import 'package:sociaty_hub/constants/ConstantDecoration.dart';
 import 'package:sociaty_hub/constants/ConstantFunctions.dart';
 import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/screens/SignInScreen.dart';
+import 'package:sociaty_hub/screens/Wrapper.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
 import 'package:sociaty_hub/services/Database.dart';
 import 'package:string_validator/string_validator.dart';
@@ -113,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
+                                  builder: (context) => Wrapper()));
                         }
                       }
                     },
