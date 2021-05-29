@@ -227,7 +227,11 @@ class _chatTileState extends State<chatTile> {
                     color: darkGrey, borderRadius: BorderRadius.circular(40))),
             SizedBox(width: 8),
             Text(
-              widget.username,
+              widget.username
+                  .toString()
+                  .replaceAll("_", '')
+                  .replaceAll(";", "")
+                  .replaceAll(ConstantAttributes.myName, ""),
               style: TextStyle(
                 color: darkGrey,
               ),

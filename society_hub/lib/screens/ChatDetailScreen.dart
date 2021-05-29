@@ -17,7 +17,7 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final databaseReference = FirebaseFirestore.instance;
   Database databaseRefrence = Database();
-  TextEditingController message = TextEditingController();
+  final message = TextEditingController();
 
   Stream chatMessageStream;
 
@@ -150,6 +150,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     ),
                     Expanded(
                       child: TextField(
+                        controller: message,
                         onChanged: (message) {
                           setState(() {
                             this.message.text = message;
