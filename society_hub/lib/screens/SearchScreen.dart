@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../models/user.dart';
+import 'package:sociaty_hub/models/User.dart';
 import '../widgets/progress.dart';
 import 'ProfileScreen.dart';
 

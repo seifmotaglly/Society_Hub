@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/screens/ChatScreen.dart';
 import 'package:sociaty_hub/screens/ProfileScreen.dart';
 import 'package:sociaty_hub/screens/SearchScreen.dart';
@@ -21,7 +22,7 @@ class _BottomBarState extends State<BottomBar> {
   List<Widget> widgetOption = [
     HomeScreen(),
     //pass el current user id here instade of this, its for testing
-    ProfileScreen(profileId: 'YUf6xZx3sVLGPKalnlHg'),
+    ProfileScreen(profileId: User.myUser.id),
     ChatScreen(),
     Search()
   ];

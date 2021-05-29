@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sociaty_hub/constants/ConstantAttributes.dart';
+import 'package:sociaty_hub/models/User.dart';
 
 class Database {
   final databaseReference = FirebaseFirestore.instance;
@@ -17,8 +19,19 @@ class Database {
         .get();
   }
 
+  getUsernameById(String id) async {
+    try {
+      return await databaseReference
+          .collection("users")
+          .where("id", isEqualTo: id)
+          .get();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   uploadUserDate(userMap) {
-    databaseReference.collection("users").add(userMap);
+    databaseReference.collection("users").doc(User.myUser.id).set(userMap);
   }
 
   createChatRoom(String chatRoomId, chatRoomMap) {
@@ -44,7 +57,7 @@ class Database {
   getConversationMessages(String chatRoomId) async {
     try {
       print("uploading message");
-      return await databaseReference
+      return databaseReference
           .collection("ChatRoom")
           .doc(chatRoomId)
           .collection("chats")
@@ -56,7 +69,7 @@ class Database {
   }
 
   getChatRooms(String username) async {
-    return await databaseReference
+    return databaseReference
         .collection("ChatRoom")
         .where("users", arrayContains: username)
         .snapshots();
@@ -79,8 +92,11 @@ class Database {
   }
 
   getPost() async {
+    print("User ID");
+    print(
+        "${databaseReference.collection("users").doc("YUf6xZx3sVLGPKalnlHg").id}");
     try {
-      return await databaseReference
+      return databaseReference
           .collection("posts")
           .orderBy("time", descending: true)
           .snapshots();

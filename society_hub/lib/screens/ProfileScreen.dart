@@ -2,7 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sociaty_hub/models/User.dart';
+import 'package:sociaty_hub/screens/ChatDetailScreen.dart';
+import 'package:sociaty_hub/screens/ChatScreen.dart';
 import 'package:sociaty_hub/screens/EditProfile.dart';
+import 'package:sociaty_hub/screens/MakeFeedScreen.dart';
+import 'package:sociaty_hub/services/Database.dart';
 import 'package:sociaty_hub/widgets/progress.dart';
 
 import '../constants/ConstantColors.dart';
@@ -21,7 +25,8 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final String currentUserId = "YUf6xZx3sVLGPKalnlHg";
+  final Database databaseRefrence = Database();
+  final String currentUserId = User.myUser.id;
   //String profileId = "YUf6xZx3sVLGPKalnlHg"; testing id
   bool isLoading = false;
   bool isFriend = false;
@@ -108,11 +113,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style:
                                         Theme.of(context).textTheme.headline5,
                                   ),
-                                  Text('(${user.displayName})')
+                                  Text('${user.displayName}')
                                 ],
                               ),
                             ),
-                            SizedBox(height: 10.0),
+                            SizedBox(height: 20.0),
                             Row(
                               children: [
                                 Expanded(child: buildProfileButton()),
@@ -153,88 +158,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
     DocumentSnapshot doc = await friendsRef
         .doc(widget.profileId)
         .collection('userFriends')
-        .doc(currentUserId)
+        .doc()
         .get();
     setState(() {
       isFriend = doc.exists;
     });
   }
 
-  // buildProfileHeader1() {
-  //   print('in Future Builder');
-  //   return FutureBuilder<DocumentSnapshot>(
-  //     future: usersRef.doc(widget.profileId).get(),
-  //     builder:
-  //         (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-  //       //Test data existence
-  //       if (!snapshot.hasData) {
-  //         return circularProgress();
-  //       }
-  //       // if (snapshot.hasData && !snapshot.data.exists) {
-  //       //   return Text('Doc doesnt exist');
-  //       // }
-  //       // if (snapshot.connectionState == ConnectionState.done) {
-  //       //   Map<String, dynamic> data = snapshot.data.data();
-  //       //   return Text("Full Name: ${data['name']} ${data['email']}");
-  //       // }
-  //       // return Text("loading");
-  //       User user = User.fromDocument(snapshot.data);
-  //       return Padding(
-  //         padding: EdgeInsets.all(10.0),
-  //         child: Column(
-  //           children: <Widget>[
-  //             Wrap(
-  //               direction: Axis.horizontal,
-  //               children: <Widget>[
-  //                 Center(
-  //                   child: CircleAvatar(
-  //                       radius: 40.0,
-  //                       backgroundColor: Colors.grey,
-  //                       backgroundImage:
-  //                           CachedNetworkImageProvider(user.photoUrl)),
-  //                 ),
-  //                 Row(
-  //                   children: <Widget>[buildProfileButton()],
-  //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  //                 )
-  //               ],
-  //             ),
-  //             Container(
-  //               alignment: Alignment.centerLeft,
-  //               padding: EdgeInsets.only(top: 12.0),
-  //               child: Text(
-  //                 user.username,
-  //                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.0),
-  //               ),
-  //             ),
-  //             Container(
-  //               alignment: Alignment.centerLeft,
-  //               padding: EdgeInsets.only(top: 4),
-  //               child: Text(
-  //                 user.displayName,
-  //                 style: TextStyle(fontWeight: FontWeight.bold),
-  //               ),
-  //             ),
-  //             Container(
-  //               alignment: Alignment.centerLeft,
-  //               padding: EdgeInsets.only(top: 2),
-  //               child: Text(user.bio),
-  //             )
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
-
   buildProfileButton() {
     print("id");
     print(widget.profileId);
     bool isProfileOwner = currentUserId == widget.profileId;
     if (isProfileOwner) {
-      return buildButton(text: 'Edit Profile', function: editProfile);
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        buildButton(text: 'Edit Profile', function: editProfile),
+        makeFeed()
+      ]);
     } else if (isFriend) {
-      return buildButton(text: "Remove Friend", function: handleUnFriend);
+      return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        buildButton(text: "Remove Friend", function: handleUnFriend),
+        SizedBox(width: 10),
+        messageButton(widget.profileId)
+      ]);
     } else if (!isFriend) {
       return buildButton(text: "Add Friend", function: handleAddFriend);
     }
@@ -275,7 +220,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: TextButton(
           onPressed: function,
           child: Container(
-            width: 250.0,
+            width: isFriend ? 100 : 100.0,
             height: 27.0,
             decoration: BoxDecoration(
               color: isFriend ? Colors.white : Colors.blue,
@@ -285,6 +230,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
             alignment: Alignment.center,
             child: Text(
               text,
+              style: TextStyle(
+                  color: isFriend ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ));
+  }
+
+  Container messageButton(String id) {
+    return Container(
+        padding: EdgeInsets.only(top: 2.0),
+        child: TextButton(
+          onPressed: () async {
+            String chatRoomId = await ChatScreen().creatChat(id);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ChatDetailPage(chatRoomId: chatRoomId)));
+          },
+          child: Container(
+            width: 100.0,
+            height: 27.0,
+            decoration: BoxDecoration(
+              color: isFriend ? Colors.white : Colors.blue,
+              border: Border.all(color: isFriend ? Colors.grey : Colors.blue),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "Message",
+              style: TextStyle(
+                  color: isFriend ? Colors.black : Colors.white,
+                  fontWeight: FontWeight.bold),
+            ),
+          ),
+        ));
+  }
+
+  Container makeFeed() {
+    return Container(
+        padding: EdgeInsets.only(top: 2.0),
+        child: TextButton(
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => MakeFeedScreen()));
+          },
+          child: Container(
+            width: 100.0,
+            height: 27.0,
+            decoration: BoxDecoration(
+              color: isFriend ? Colors.white : Colors.blue,
+              border: Border.all(color: isFriend ? Colors.grey : Colors.blue),
+              borderRadius: BorderRadius.circular(5.0),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              "Add post",
               style: TextStyle(
                   color: isFriend ? Colors.black : Colors.white,
                   fontWeight: FontWeight.bold),

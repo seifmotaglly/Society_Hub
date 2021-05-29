@@ -8,6 +8,7 @@ class User {
   final String photoUrl;
   final String bio;
 
+  static User myUser;
   User(
       {this.id,
       this.username,

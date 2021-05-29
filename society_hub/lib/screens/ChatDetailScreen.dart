@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
+import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/services/Database.dart';
 
 class ChatDetailPage extends StatefulWidget {
   final String chatRoomId;
-  ChatDetailPage({this.chatRoomId});
+  final String id;
+  ChatDetailPage({this.chatRoomId, this.id});
 
   @override
   _ChatDetailPageState createState() => _ChatDetailPageState();
@@ -90,10 +92,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   SizedBox(
                     width: 2,
                   ),
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/pic.png'),
-                    maxRadius: 20,
-                  ),
+                  // CircleAvatar(
+                  //   backgroundImage: AssetImage('assets/images/pic.png'),
+                  //   maxRadius: 20,
+                  // ),
                   SizedBox(
                     width: 12,
                   ),
@@ -103,7 +105,11 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Text(
-                          "Kriss Benwat",
+                          widget.chatRoomId
+                              .toString()
+                              .replaceAll("_", '')
+                              .replaceAll(";", "")
+                              .replaceAll(User.myUser.username, ""),
                           style: TextStyle(
                               color: white,
                               fontSize: 16,
@@ -111,10 +117,6 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         ),
                         SizedBox(
                           height: 6,
-                        ),
-                        Text(
-                          "Online",
-                          style: TextStyle(color: Colors.green, fontSize: 13),
                         ),
                       ],
                     ),

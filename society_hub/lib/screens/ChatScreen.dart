@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
-import 'package:sociaty_hub/constants/ConstantFunctions.dart';
+import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/screens/ChatDetailScreen.dart';
 import 'package:sociaty_hub/services/Database.dart';
 
 class ChatScreen extends StatefulWidget {
+  creatChat(String id) => createState().createChatRoom(id: id);
+
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -32,7 +34,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       .toString()
                       .replaceAll("_", '')
                       .replaceAll(";", "")
-                      .replaceAll(ConstantAttributes.myName, "");
+                      .replaceAll(User.myUser.username, "");
                   return chatTile(
                       username: username,
                       chatRoomId: snapshot.data.docs[index]["chatroomid"],
@@ -48,18 +50,22 @@ class _ChatScreenState extends State<ChatScreen> {
   initiateSearch() {
     print("first print");
     setState(() {
-      Update();
+      update();
     });
   }
 
-  Future<void> Update() async {
+  Future<void> update() async {
     print("updating");
     searchSnapshot = await databaseReference.getUserByUsername(searchText);
   }
 
-  createChatRoom({String username}) {
-    if (username != ConstantAttributes.myName) {
-      String chatRoomId = getChatRoomId(username, ConstantAttributes.myName);
+  createChatRoom({String id}) async {
+    String chatRoomId;
+    if (id != User.myUser.id) {
+      Database database = Database();
+      QuerySnapshot snapshot = await database.getUsernameById(id);
+      String username = snapshot.docs[0]["name"];
+      chatRoomId = getChatRoomId(username, ConstantAttributes.myName);
       List<String> users = [username, ConstantAttributes.myName];
       Map<String, bool> isRead = {
         ConstantAttributes.myName.toString(): false,
@@ -71,16 +77,17 @@ class _ChatScreenState extends State<ChatScreen> {
         "isRead": isRead
       };
       Database().createChatRoom(chatRoomId, chatRoomMap);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ChatDetailPage(chatRoomId: chatRoomId)));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => ChatDetailPage(chatRoomId: chatRoomId)));
     } else {
       print("u cant send a message to u ");
     }
+    return chatRoomId;
   }
 
-  Widget SearchTile({String username, String email}) {
+  Widget searchTile({String username, String email}) {
     return Container(
       height: 40,
       width: double.infinity,
@@ -99,7 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
           Spacer(),
           GestureDetector(
             onTap: () {
-              createChatRoom(username: username);
+              createChatRoom(id: username);
             },
             child: Container(
                 decoration: BoxDecoration(
@@ -139,8 +146,8 @@ class _ChatScreenState extends State<ChatScreen> {
               print("$index");
               print(searchSnapshot.docs.toString());
               print(searchSnapshot.docs[index]["email"]);
-              return SearchTile(
-                  username: searchSnapshot.docs[index]["name"],
+              return searchTile(
+                  username: searchSnapshot.docs[index]["id"],
                   email: searchSnapshot.docs[index]["email"]);
             })
         : Container();

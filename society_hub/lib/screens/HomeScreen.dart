@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
+import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
 import 'package:sociaty_hub/services/AuthService.dart';
 import 'package:sociaty_hub/services/Database.dart';
-import 'package:sociaty_hub/constants/ConstantAttributes.dart';
+import 'package:sociaty_hub/widgets/progress.dart';
 
 class HomeScreen extends StatefulWidget {
+  uploadPost(String text) => createState().uploadFeed(feedText: text);
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -28,12 +31,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 itemBuilder: (context, index) {
                   print("hello this from home screen tryiing");
                   print("${snappshot.data.docs[index]["post"]}");
+
                   return makeFeed(
                       username: snappshot.data.docs[index]["name"],
                       text: snappshot.data.docs[index]["post"]);
                 },
               )
-            : Container();
+            : circularProgress();
       },
     );
   }
@@ -136,11 +140,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  uploadFeed({userName, feedText}) {
+  uploadFeed({feedText}) {
     Database database = Database();
 
     Map<String, dynamic> postMap = {
-      "name": userName,
+      "name": User.myUser.username,
       "post": feedText,
       "time": DateTime.now().millisecondsSinceEpoch
     };

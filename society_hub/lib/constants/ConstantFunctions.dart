@@ -16,11 +16,11 @@ class ConstantFunctions {
 
   static Future<String> getUserName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return await prefs.getString(sharedUserNamekey);
+    return prefs.getString(sharedUserNamekey);
   }
 
   static Future<String> getEmail() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return await prefs.getString(sharedEmailkey);
+    return prefs.getString(sharedEmailkey);
   }
 }
