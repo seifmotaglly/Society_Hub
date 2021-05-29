@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/screens/WelcomeScreen.dart';
@@ -144,8 +146,9 @@ class _HomeScreenState extends State<HomeScreen> {
     Database database = Database();
 
     Map<String, dynamic> postMap = {
-      "name": User.myUser.username,
+      "name": ConstantAttributes.myName,
       "post": feedText,
+      "image": User.myUser.photoUrl,
       "time": DateTime.now().millisecondsSinceEpoch
     };
 
@@ -175,8 +178,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/aiony-haust.jpg"),
+                                  image: CachedNetworkImageProvider(
+                                      User.myUser.photoUrl),
                                   fit: BoxFit.cover)),
                         ),
                       ),

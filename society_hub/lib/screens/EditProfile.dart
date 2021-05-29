@@ -17,6 +17,7 @@ class _EditProfileState extends State<EditProfile> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController displayNameController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
+  TextEditingController bioController = TextEditingController();
   bool isLoading = false;
   User user;
   bool userNameValidation = true;
@@ -36,6 +37,7 @@ class _EditProfileState extends State<EditProfile> {
     user = User.fromDocument(doc);
     displayNameController.text = user.displayName;
     userNameController.text = user.username;
+    bioController.text = user.bio;
     setState(() {
       isLoading = false;
     });
@@ -77,9 +79,30 @@ class _EditProfileState extends State<EditProfile> {
         TextField(
           controller: userNameController,
           decoration: InputDecoration(
-              hintText: 'Update User Name',
-              errorText: userNameValidation ? null : 'User name too short'),
-        )
+            hintText: 'Update User Name',
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column updateBio() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(top: 12),
+          child: Text(
+            'Bio',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+        TextField(
+          controller: bioController,
+          decoration: InputDecoration(
+            hintText: 'Update your bio',
+          ),
+        ),
       ],
     );
   }
@@ -98,7 +121,8 @@ class _EditProfileState extends State<EditProfile> {
       if (displayNameValidation && userNameValidation) {
         usersRef.doc(widget.currentUserId).update({
           'display_name': displayNameController.text,
-          'name': userNameController.text
+          'name': userNameController.text,
+          'bio': bioController.text
         });
       }
     });
@@ -149,7 +173,8 @@ class _EditProfileState extends State<EditProfile> {
                         child: Column(
                           children: <Widget>[
                             displayNameField(),
-                            userNameField()
+                            userNameField(),
+                            updateBio(),
                           ],
                         ),
                       ),

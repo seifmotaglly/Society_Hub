@@ -20,7 +20,10 @@ class _MakeFeedScreenState extends State<MakeFeedScreen> {
             IconButton(
                 icon: Icon(Icons.done),
                 onPressed: () {
-                  HomeScreen().uploadPost(text);
+                  if (text != "") {
+                    HomeScreen().uploadPost(text);
+                    Navigator.pop(context);
+                  }
                 })
           ],
         ),
