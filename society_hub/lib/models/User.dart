@@ -5,7 +5,7 @@ class User {
   final String username;
   final String email;
   final String displayName;
-  final String photoUrl;
+  String photoUrl;
   final String bio;
 
   static User myUser;

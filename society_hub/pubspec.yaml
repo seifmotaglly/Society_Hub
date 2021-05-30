@@ -29,7 +29,9 @@ dependencies:
   curved_navigation_bar: ^0.3.7
   firebase_auth: ^1.2.0
   firebase_core: ^1.2.0
+  firebase_storage: ^8.1.0
   flutter_spinkit: ^5.0.0
+  image_picker: ^0.7.5+3
   page_transition: ^2.0.2
   provider: ^5.0.0
   shared_preferences: ^2.0.6

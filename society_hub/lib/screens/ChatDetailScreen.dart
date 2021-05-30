@@ -65,6 +65,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
       });
     });
     super.initState();
+    chatMessagesList();
   }
 
   @override
@@ -108,7 +109,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                               .toString()
                               .replaceAll("_", '')
                               .replaceAll(";", "")
-                              .replaceAll(User.myUser.username, ""),
+                              .replaceAll(ConstantAttributes.myName, ""),
                           style: TextStyle(
                               color: white,
                               fontSize: 16,
@@ -150,7 +151,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     Expanded(
                       child: TextField(
                         textDirection: TextDirection.ltr,
-                        controller: messageController,
+                        // controller: messageController,
                         onChanged: (value) {
                           setState(() {
                             this.messageController.text = value;

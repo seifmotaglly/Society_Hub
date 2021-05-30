@@ -27,7 +27,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final Database databaseRefrence = Database();
   final String currentUserId = User.myUser.id;
-  //String profileId = "YUf6xZx3sVLGPKalnlHg"; testing id
   bool isLoading = false;
   bool isFriend = false;
   bool isProfileOwner = false;
@@ -74,14 +73,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (!snapshot.hasData) {
           return circularProgress();
         }
-        User user = User.fromDocument(snapshot.data);
+        User _user = User.fromDocument(snapshot.data);
         return Stack(
           children: [
             SizedBox(
               height: 200,
               width: double.infinity,
               child: CachedNetworkImage(
-                imageUrl: user.photoUrl,
+                imageUrl: _user.photoUrl,
                 imageBuilder: (context, imageProvider) => Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
@@ -113,11 +112,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 direction: Axis.horizontal,
                                 children: [
                                   Text(
-                                    user.username,
+                                    _user.username,
                                     style:
                                         Theme.of(context).textTheme.headline5,
                                   ),
-                                  Text('${user.displayName}')
+                                  Text('${_user.displayName}')
                                 ],
                               ),
                             ),
@@ -130,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: Text(user.bio),
+                                  child: Text(_user.bio),
                                 ),
                               ],
                             )
@@ -143,7 +142,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10.0),
                             image: DecorationImage(
-                                image: NetworkImage(user.photoUrl),
+                                image: NetworkImage(_user.photoUrl),
                                 fit: BoxFit.cover)),
                         margin: EdgeInsets.only(left: 16.0),
                       ),

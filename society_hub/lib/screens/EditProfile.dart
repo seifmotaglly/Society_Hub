@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/widgets/progress.dart';
 import 'ProfileScreen.dart';
+import 'package:path/path.dart' as Path;
 
 class EditProfile extends StatefulWidget {
   final String currentUserId;
@@ -22,6 +27,8 @@ class _EditProfileState extends State<EditProfile> {
   User user;
   bool userNameValidation = true;
   bool displayNameValidation = true;
+  PickedFile _image;
+  File _imageFile;
 
   @override
   void initState() {
@@ -122,8 +129,10 @@ class _EditProfileState extends State<EditProfile> {
         usersRef.doc(widget.currentUserId).update({
           'display_name': displayNameController.text,
           'name': userNameController.text,
-          'bio': bioController.text
+          'bio': bioController.text,
+          'photo_url': user.photoUrl
         });
+        User.myUser.photoUrl = user.photoUrl;
       }
     });
     SnackBar snackbar = SnackBar(
@@ -162,10 +171,16 @@ class _EditProfileState extends State<EditProfile> {
                     children: <Widget>[
                       Padding(
                         padding: EdgeInsets.only(top: 16.0, bottom: 8),
-                        child: CircleAvatar(
-                          backgroundImage:
-                              CachedNetworkImageProvider(user.photoUrl),
-                          radius: 50.0,
+                        child: GestureDetector(
+                          onTap: () {
+                            print("tappe");
+                            chooseFile();
+                          },
+                          child: CircleAvatar(
+                            backgroundImage:
+                                CachedNetworkImageProvider(user.photoUrl),
+                            radius: 50.0,
+                          ),
                         ),
                       ),
                       Padding(
@@ -187,5 +202,29 @@ class _EditProfileState extends State<EditProfile> {
               ],
             ),
     );
+  }
+
+  Future chooseFile() async {
+    final _picker = ImagePicker();
+    await _picker.getImage(source: ImageSource.gallery).then((image) {
+      setState(() {
+        _image = image;
+        _imageFile = File(image.path);
+      });
+    });
+    uploadFile();
+  }
+
+  Future uploadFile() async {
+    Reference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('chats/${Path.basename(_image.path)}}');
+    UploadTask uploadTask = storageReference.putFile(_imageFile);
+    await uploadTask.whenComplete(() => print('File Uploaded'));
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        user.photoUrl = fileURL;
+      });
+    });
   }
 }
