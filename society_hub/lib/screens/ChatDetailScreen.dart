@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
-import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/services/Database.dart';
 
 class ChatDetailPage extends StatefulWidget {
@@ -17,7 +16,7 @@ class ChatDetailPage extends StatefulWidget {
 class _ChatDetailPageState extends State<ChatDetailPage> {
   final databaseReference = FirebaseFirestore.instance;
   Database databaseRefrence = Database();
-  final messageController = TextEditingController();
+  TextEditingController messageController = TextEditingController();
 
   Stream chatMessageStream;
 
@@ -151,13 +150,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     Expanded(
                       child: TextField(
                         textDirection: TextDirection.ltr,
-                        // controller: messageController,
-                        onChanged: (value) {
-                          setState(() {
-                            this.messageController.text = value;
-                          });
-                        },
-                        textInputAction: TextInputAction.go,
+                        maxLines: null,
+                        controller: messageController,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.newline,
                         style: TextStyle(color: white),
                         decoration: InputDecoration(
                             hintText: "Write message...",

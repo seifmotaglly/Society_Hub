@@ -18,8 +18,33 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String text;
   Stream newsfeed;
+  bool isLiked = false;
   Database database = Database();
   final AuthService _auth = AuthService();
+
+  // Widget newsFeedList() {
+  //   return StreamBuilder(
+  //     stream: newsfeed,
+  //     builder: (context, snappshot) {
+  //       print("printing");
+  //       return snappshot.hasData
+  //           ? ListView.builder(
+  //               shrinkWrap: true,
+  //               itemCount: snappshot.data.docs.length,
+  //               // physics: NeverScrollableScrollPhysics(),
+  //               itemBuilder: (context, index) {
+  //                 print("hello this from home screen tryiing");
+  //                 print("${snappshot.data.docs[index]["post"]}");
+
+  //                 return makeFeed(
+  //                     username: snappshot.data.docs[index]["name"],
+  //                     text: snappshot.data.docs[index]["post"]);
+  //               },
+  //             )
+  //           : circularProgress();
+  //     },
+  //   );
+  // }
 
   Widget newsFeedList() {
     return StreamBuilder(
@@ -27,17 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, snappshot) {
         print("printing");
         return snappshot.hasData
-            ? ListView.builder(
-                shrinkWrap: true,
-                itemCount: snappshot.data.docs.length,
-                itemBuilder: (context, index) {
-                  print("hello this from home screen tryiing");
-                  print("${snappshot.data.docs[index]["post"]}");
-
-                  return makeFeed(
-                      username: snappshot.data.docs[index]["name"],
-                      text: snappshot.data.docs[index]["post"]);
-                },
+            ? CustomScrollView(
+                slivers: [
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                    return headerPost();
+                  }, childCount: 1)),
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                    return makeFeed(
+                        username: snappshot.data.docs[index]["name"],
+                        text: snappshot.data.docs[index]["post"]);
+                  }, childCount: snappshot.data.docs.length))
+                ],
               )
             : circularProgress();
       },
@@ -60,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: lightGrey,
         appBar: AppBar(
           elevation: 0.0,
@@ -82,61 +110,63 @@ class _HomeScreenState extends State<HomeScreen> {
                 })
           ],
         ),
-        body: Stack(
-          // crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(height: 15),
-            newsFeedList()
-            // Container(
-            //   color: lightGrey,
-            //   padding:
-            //       EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
-            //   child: Row(
-            //     children: <Widget>[
-            //       Expanded(
-            //         child: Container(
-            //           decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(50),
-            //               color: Colors.white),
-            //           child: TextField(
-            //             onChanged: (value) {
-            //               setState(() {
-            //                 text = value;
-            //               });
-            //             },
-            //             decoration: InputDecoration(
-            //               contentPadding: EdgeInsets.symmetric(horizontal: 10),
-            //               border: InputBorder.none,
-            //               hintStyle: TextStyle(color: Colors.grey),
-            //               hintText: "Create Post",
-            //             ),
-            //           ),
-            //         ),
-            //       ),
-            //       SizedBox(
-            //         width: 20,
-            //       ),
-            //       IconButton(
-            //         icon: Icon(Icons.send),
-            //         color: Colors.grey[800],
-            //         onPressed: () {
-            //           uploadFeed(
-            //               userName: ConstantAttributes.myName, feedText: text);
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            // ),
-            // Expanded(
-            //   child: SingleChildScrollView(
-            //     scrollDirection: Axis.vertical,
-            //     child: Padding(
-            //       padding: EdgeInsets.all(15),
-            //       child: newsFeedList(),
-            //     ),
-            //   ),
-            // )
-          ],
+        body: Container(
+          margin: EdgeInsets.symmetric(horizontal: 10),
+          child: Stack(
+            children: <Widget>[
+              SizedBox(height: 15),
+              newsFeedList()
+              // Container(
+              //   color: lightGrey,
+              //   padding:
+              //       EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
+              //   child: Row(
+              //     children: <Widget>[
+              //       Expanded(
+              //         child: Container(
+              //           decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(50),
+              //               color: Colors.white),
+              //           child: TextField(
+              //             onChanged: (value) {
+              //               setState(() {
+              //                 text = value;
+              //               });
+              //             },
+              //             decoration: InputDecoration(
+              //               contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              //               border: InputBorder.none,
+              //               hintStyle: TextStyle(color: Colors.grey),
+              //               hintText: "Create Post",
+              //             ),
+              //           ),
+              //         ),
+              //       ),
+              //       SizedBox(
+              //         width: 20,
+              //       ),
+              //       IconButton(
+              //         icon: Icon(Icons.send),
+              //         color: Colors.grey[800],
+              //         onPressed: () {
+              //           uploadFeed(
+              //               userName: ConstantAttributes.myName, feedText: text);
+              //         },
+              //       ),
+              //     ],
+              //   ),
+              // ),
+              // Expanded(
+              //   child: SingleChildScrollView(
+              //     scrollDirection: Axis.vertical,
+              //     child: Padding(
+              //       padding: EdgeInsets.all(15),
+              //       child: newsFeedList(),
+              //     ),
+              //   ),
+              // )
+            ],
+          ),
         ),
       ),
     );
@@ -151,8 +181,63 @@ class _HomeScreenState extends State<HomeScreen> {
       "image": User.myUser.photoUrl,
       "time": DateTime.now().millisecondsSinceEpoch
     };
-
     database.uploadPost(postMap);
+  }
+
+  Widget headerPost() {
+    return Container(
+        margin: EdgeInsets.only(top: 20),
+        color: lightGrey,
+        child: Column(children: [
+          Container(
+              decoration: BoxDecoration(
+                  color: white,
+                  borderRadius: BorderRadius.all(Radius.circular(15))),
+              padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 10),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Center(
+                      child: Transform.translate(
+                        offset: Offset(0, -20),
+                        child: Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: CachedNetworkImageProvider(
+                                      User.myUser.photoUrl),
+                                  fit: BoxFit.cover)),
+                        ),
+                      ),
+                    ),
+                    Transform.translate(
+                      offset: Offset(0, -10),
+                      child: Align(
+                        child: Text(
+                          User.myUser.username,
+                          style: TextStyle(
+                              color: Colors.grey[900],
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 10, right: 70),
+                        child: TextField(
+                          maxLines: null,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                              hintText: "Hey!, what's on your mind"),
+                        ))
+                  ]))
+        ]));
   }
 
   Widget makeFeed({String username, String text}) {
@@ -165,7 +250,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   color: white,
                   borderRadius: BorderRadius.all(Radius.circular(15))),
               padding: EdgeInsets.only(top: 5, left: 10, right: 10, bottom: 10),
-              margin: EdgeInsets.only(bottom: 20),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -207,6 +291,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.grey[800],
                           height: 1.5,
                           letterSpacing: .7),
+                    ),
+                    Divider(height: 20),
+                    Row(
+                      children: [
+                        IconButton(
+                            icon: isLiked
+                                ? Icon(Icons.thumb_up_alt)
+                                : Icon(Icons.thumb_up_alt_outlined),
+                            onPressed: () {
+                              setState(() {
+                                isLiked = !isLiked;
+                              });
+                            }),
+                        IconButton(
+                            icon: isLiked
+                                ? Icon(Icons.favorite)
+                                : Icon(Icons.favorite_outline),
+                            onPressed: () {
+                              setState(() {
+                                isLiked != isLiked;
+                              });
+                            })
+                      ],
                     )
                   ]))
         ]));
