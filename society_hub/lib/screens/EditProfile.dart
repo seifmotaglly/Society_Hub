@@ -104,11 +104,17 @@ class _EditProfileState extends State<EditProfile> {
             style: TextStyle(color: Colors.grey),
           ),
         ),
-        TextField(
-          controller: bioController,
-          decoration: InputDecoration(
-            hintText: 'Update your bio',
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: bioController,
+                decoration: InputDecoration(
+                  hintText: 'Update your bio',
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

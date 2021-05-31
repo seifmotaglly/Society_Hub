@@ -153,7 +153,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                         maxLines: null,
                         controller: messageController,
                         keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.newline,
+                        textInputAction: TextInputAction.go,
                         style: TextStyle(color: white),
                         decoration: InputDecoration(
                             hintText: "Write message...",

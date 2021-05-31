@@ -228,14 +228,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 3,
                     ),
-                    Padding(
-                        padding: EdgeInsets.only(bottom: 10, right: 70),
-                        child: TextField(
-                          maxLines: null,
-                          style: TextStyle(color: Colors.black),
-                          decoration: InputDecoration(
-                              hintText: "Hey!, what's on your mind"),
-                        ))
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding:
+                                EdgeInsets.only(left: 5, bottom: 5, right: 60),
+                            child: TextField(
+                              maxLines: null,
+                              style: TextStyle(color: Colors.black),
+                              decoration: InputDecoration(
+                                  hintText: "Hey!, what's on your mind"),
+                            ),
+                          ),
+                        ),
+                        IconButton(icon: Icon(Icons.send), onPressed: () {})
+                      ],
+                    )
                   ]))
         ]));
   }
