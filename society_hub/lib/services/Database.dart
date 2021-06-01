@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/models/User.dart';
+import 'package:uuid/uuid.dart';
 
 class Database {
   final databaseReference = FirebaseFirestore.instance;
@@ -82,10 +83,10 @@ class Database {
     });
   }
 
-  uploadPost(postMap) {
+  uploadPost(postMap, String postId) {
     print("heeel");
     try {
-      databaseReference.collection("posts").add(postMap);
+      databaseReference.collection("posts").doc(postId).set(postMap);
     } catch (e) {
       print(e.toString());
     }
@@ -103,5 +104,12 @@ class Database {
     } catch (e) {
       print(e.toString());
     }
+  }
+
+  getLikedList(String postId) async {
+    DocumentReference doc =
+        await databaseReference.collection("posts").doc(postId);
+    doc.get().then((value) => print(value.data));
+    print("heyyyy $doc");
   }
 }
