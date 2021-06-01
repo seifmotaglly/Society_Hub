@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c2121d83-7ffc-464d-b064-3d8340a96c6a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/fonts/OpenSans-Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/aatik-tasneem.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/aiony-haust.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/averie-woodard.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/azamat-zhanisov-.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/azamat-zhanisov.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/foto-sushi.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/jurica-koletic.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/lucas-sankey.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/michael-frattaroli.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/pic.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/story/story-1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/story/story-2.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/story/story-3.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/story/story-4.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/story/story-5.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/assets/images/story/story-6.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/constants/ConstantAttributes.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/constants/ConstantFunctions.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/models/User.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/screens/ChatDetailScreen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/screens/ChatScreen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/screens/EditProfile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/screens/MakeFeedScreen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/screens/SearchScreen.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/services/Database.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/society_hub/lib/widgets/progress.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/android/app/src/main/AndroidManifest.xml" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/android/app/src/main/AndroidManifest.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/models/SHUser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/models/SHUser.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/HomeScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/HomeScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/LoadingScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/LoadingScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/ProfileScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/ProfileScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/SignInScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/SignInScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/SignUpScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/SignUpScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/WelcomeScreen.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/WelcomeScreen.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/screens/Wrapper.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/screens/Wrapper.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/services/Auth.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/services/AuthService.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/lib/widgets/bottombar/bottombar.dart" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/lib/widgets/bottombar/bottombar.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/society_hub/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/society_hub/pubspec.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1tKTnNPPcsjnYcQ51wmzGUd9v4m" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c2121d83-7ffc-464d-b064-3d8340a96c6a" name="Default Changelist" comment="" />
+      <created>1622516978538</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1622516978538</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="141" y="42" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1622517047936">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="141" y="42" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.768@0.0.1366.768" timestamp="1622517047936" />
+    <state x="466" y="145" width="424" height="491" key="FileChooserDialogImpl" timestamp="1622517228180">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="466" y="145" width="424" height="491" key="FileChooserDialogImpl/0.0.1366.768@0.0.1366.768" timestamp="1622517228180" />
+    <state x="172" y="19" width="1022" height="737" key="SettingsEditor" timestamp="1622517232919">
+      <screen x="0" y="0" width="1366" height="768" />
+    </state>
+    <state x="172" y="19" width="1022" height="737" key="SettingsEditor/0.0.1366.768@0.0.1366.768" timestamp="1622517232919" />
+  </component>
+</project>

@@ -2,8 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sociaty_hub/models/SHUser.dart';
-import 'package:sociaty_hub/screens/Wrapper.dart';
-import 'package:sociaty_hub/services/Auth.dart';
+import 'package:sociaty_hub/screens/LoadingScreen.dart';
+import 'package:sociaty_hub/services/AuthService.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,6 +20,7 @@ class SociatyHub extends StatelessWidget {
     return StreamProvider<SHUser>.value(
         initialData: null,
         value: AuthService().user,
-        child: MaterialApp(home: Wrapper()));
+        child: MaterialApp(
+            debugShowCheckedModeBanner: false, home: LoadingScreen()));
   }
 }

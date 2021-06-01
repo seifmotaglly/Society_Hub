@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:sociaty_hub/constants/ConstantAttributes.dart';
 import 'package:sociaty_hub/constants/ConstantColors.dart';
 import 'package:sociaty_hub/constants/ConstantDecoration.dart';
+import 'package:sociaty_hub/constants/ConstantFunctions.dart';
+import 'package:sociaty_hub/models/User.dart';
 import 'package:sociaty_hub/screens/SignInScreen.dart';
-import 'package:sociaty_hub/services/Auth.dart';
+import 'package:sociaty_hub/screens/Wrapper.dart';
+import 'package:sociaty_hub/services/AuthService.dart';
+import 'package:sociaty_hub/services/Database.dart';
 import 'package:string_validator/string_validator.dart';
-
-import 'HomeScreen.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -15,6 +18,7 @@ class SignUpScreen extends StatefulWidget {
 class _SignUpScreenState extends State<SignUpScreen> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  final databaseRefrence = Database();
 
   String userName = "";
   String email = "";
@@ -52,7 +56,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             decoration:
                                 decoratedInput.copyWith(hintText: "User name"),
                             onChanged: (userName) {
-                              setState(() => this.userName = userName);
+                              setState(() {
+                                this.userName = userName;
+                                ConstantAttributes.myName = userName;
+                              });
                             },
                           ),
                           SizedBox(height: 10),
@@ -94,11 +101,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         if (result == null) {
                           setState(() => err = "something went wrong");
                           print(err);
-                        } else
+                        } else {
+                          Map<String, String> userInfoMap = {
+                            "name": userName,
+                            "email": email,
+                            "id": User.myUser.id,
+                            "bio": User.myUser.bio,
+                            "photo_url": User.myUser.photoUrl,
+                            "display_name": User.myUser.displayName
+                          };
+                          databaseRefrence.uploadUserDate(userInfoMap);
+                          ConstantFunctions.saveEmail(email);
+                          ConstantFunctions.saveUserName(userName);
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => HomeScreen()));
+                                  builder: (context) => Wrapper()));
+                        }
                       }
                     },
                     child: Text("Sign up",
